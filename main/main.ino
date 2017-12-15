@@ -79,37 +79,46 @@ void spinBackLeft(){
 void forwardRight(){
   digitalWrite(MOTOR1_FORWARD, HIGH);
   digitalWrite(MOTOR1_BACKWARD, LOW);
-  analogWrite(MOTOR1_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 20); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, HIGH);
   digitalWrite(MOTOR2_BACKWARD, LOW);
-  analogWrite(MOTOR2_VELOCITY, 200); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 150); //This value need to be from 0-255
 }
 
 void backRight(){
   digitalWrite(MOTOR1_FORWARD, LOW);
   digitalWrite(MOTOR1_BACKWARD, HIGH);
-  analogWrite(MOTOR1_VELOCITY, 200); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 255); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, LOW);
   digitalWrite(MOTOR2_BACKWARD, HIGH);
-  analogWrite(MOTOR2_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 50); //This value need to be from 0-255
 }
 
 void forwardLeft(){
   digitalWrite(MOTOR1_FORWARD, HIGH);
   digitalWrite(MOTOR1_BACKWARD, LOW);
-  analogWrite(MOTOR1_VELOCITY, 200); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 150); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, HIGH);
   digitalWrite(MOTOR2_BACKWARD, LOW);
-  analogWrite(MOTOR2_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 20); //This value need to be from 0-255
 }
 
 void backLeft(){
   digitalWrite(MOTOR1_FORWARD, LOW);
   digitalWrite(MOTOR1_BACKWARD, HIGH);
-  analogWrite(MOTOR1_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 50); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, LOW);
   digitalWrite(MOTOR2_BACKWARD, HIGH);
-  analogWrite(MOTOR2_VELOCITY, 200); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 255); //This value need to be from 0-255
+}
+
+void do_ramming_speed(){
+  digitalWrite(MOTOR1_FORWARD, HIGH);
+  digitalWrite(MOTOR1_BACKWARD, LOW);
+  analogWrite(MOTOR1_VELOCITY, 255); //This value need to be from 0-255
+  digitalWrite(MOTOR2_FORWARD, HIGH);
+  digitalWrite(MOTOR2_BACKWARD, LOW);
+  analogWrite(MOTOR2_VELOCITY, 255); //This value need to be from 0-255
 }
 
 void do_stop(){
@@ -125,13 +134,13 @@ void back(){
 void forward_wheel_right(){
   digitalWrite(MOTOR1_FORWARD, HIGH);
   digitalWrite(MOTOR1_BACKWARD, LOW);
-  analogWrite(MOTOR1_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 40); //This value need to be from 0-255
 }
 
 void forward_wheel_left(){
   digitalWrite(MOTOR2_FORWARD, HIGH);
   digitalWrite(MOTOR2_BACKWARD, LOW);
-  analogWrite(MOTOR2_VELOCITY, 100); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 40); //This value need to be from 0-255
 }
 
 void forward_wheel_right_stop(){
@@ -203,12 +212,11 @@ void execute_strategy() {
     if (current_state == STATE_ENEMY_FIND) {
         // find enemy
        forwardRight();
-       delay(100);
     }
 
     if (current_state == STATE_ENEMY_ATTACK) {
         // move forward
-       forward();
+       do_ramming_speed();
        delay(100);
     }
 
