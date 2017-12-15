@@ -15,7 +15,7 @@ const String STATE_ENEMY_FIND = "find";
 const String STATE_ENEMY_ATTACK = "attack";
 const String STRATEGY_BACK_LEFT = "avoid_back_left";
 const String STRATEGY_BACK_RIGHT = "avoid_back_right";
-String current_state = STATE_AVOID_GOING_OUTSIDE;
+String current_state = STATE_ENEMY_FIND;
 String current_avoid_strategy = STRATEGY_BACK_LEFT;
 
 int current_right_sensor = 0;
@@ -26,6 +26,8 @@ int previous_middle_sensor = 0;
 
 int current_left_sensor = 0;
 int previous_left_sensor = 0;
+
+double distance_echo = 0.00;
 
 const double SPEED_OF_SOUND = 0.034;
 
@@ -53,12 +55,12 @@ int sensor_get_distance() {
   delayMicroseconds(10);
   digitalWrite(TRIGGER, LOW);
   int duration = pulseIn(ECHO, HIGH);
-  double distance = (duration / 2) * SPEED_OF_SOUND;
+  distance_echo = (duration / 2) * SPEED_OF_SOUND;
 //  Serial.println("Distance:");
 //  Serial.println(distance);
 //  Serial.println("Duration:");
 //  Serial.println(duration);
-  return distance;
+  return distance_echo;
 }
 
 void forward(){
@@ -68,12 +70,12 @@ void forward(){
 
 void spinBackRight(){
   backRight();
-//  delay(100);
+  delay(350);
 }
 
 void spinBackLeft(){
   backLeft();
-//  delay(100);
+  delay(350);
 }
 
 void forwardRight(){
@@ -88,7 +90,7 @@ void forwardRight(){
 void backRight(){
   digitalWrite(MOTOR1_FORWARD, LOW);
   digitalWrite(MOTOR1_BACKWARD, HIGH);
-  analogWrite(MOTOR1_VELOCITY, 255); //This value need to be from 0-255
+  analogWrite(MOTOR1_VELOCITY, 230); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, LOW);
   digitalWrite(MOTOR2_BACKWARD, HIGH);
   analogWrite(MOTOR2_VELOCITY, 50); //This value need to be from 0-255
@@ -109,10 +111,19 @@ void backLeft(){
   analogWrite(MOTOR1_VELOCITY, 50); //This value need to be from 0-255
   digitalWrite(MOTOR2_FORWARD, LOW);
   digitalWrite(MOTOR2_BACKWARD, HIGH);
-  analogWrite(MOTOR2_VELOCITY, 255); //This value need to be from 0-255
+  analogWrite(MOTOR2_VELOCITY, 230); //This value need to be from 0-255
 }
 
 void do_ramming_speed(){
+  digitalWrite(MOTOR1_FORWARD, HIGH);
+  digitalWrite(MOTOR1_BACKWARD, LOW);
+  analogWrite(MOTOR1_VELOCITY, 140); //This value need to be from 0-255
+  digitalWrite(MOTOR2_FORWARD, HIGH);
+  digitalWrite(MOTOR2_BACKWARD, LOW);
+  analogWrite(MOTOR2_VELOCITY, 140); //This value need to be from 0-255
+}
+
+void do_ramming_speed_plus(){
   digitalWrite(MOTOR1_FORWARD, HIGH);
   digitalWrite(MOTOR1_BACKWARD, LOW);
   analogWrite(MOTOR1_VELOCITY, 255); //This value need to be from 0-255
@@ -182,13 +193,11 @@ void update_sensor_values() {
 }
 
 void update_state() {
-    current_state = STATE_ENEMY_FIND;
-    
-    if (sensor_get_distance() <= 100) {
+    if (distance_echo <= 60) {
       current_state = STATE_ENEMY_ATTACK;
     }
 
-    if (sensor_get_distance() > 100) {
+    if (distance_echo > 60) {
       current_state = STATE_ENEMY_FIND;
     }
 
@@ -214,14 +223,16 @@ void execute_strategy() {
 
     if (current_state == STATE_ENEMY_ATTACK) {
         // move forward
-       do_ramming_speed();
-       delay(100);
+       if (distance_echo < 30) {
+          do_ramming_speed_plus();
+       } else {
+          do_ramming_speed();
+       } 
     }
 
     if (current_state == STATE_AVOID_GOING_OUTSIDE) {
         // move away from tape
         do_stop();
-//        delay(100);
         if (current_avoid_strategy == STRATEGY_BACK_RIGHT) {
             spinBackRight();
         }
