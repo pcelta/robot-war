@@ -68,12 +68,12 @@ void forward(){
 
 void spinBackRight(){
   backRight();
-  delay(500);
+//  delay(100);
 }
 
 void spinBackLeft(){
   backLeft();
-  delay(500);
+//  delay(100);
 }
 
 void forwardRight(){
@@ -179,8 +179,6 @@ void update_sensor_values() {
     Serial.println(previous_left_sensor);
     Serial.println("CURRENT_LEFT:");
     Serial.println(current_left_sensor);
-    delay(1000);
-  
 }
 
 void update_state() {
@@ -223,7 +221,7 @@ void execute_strategy() {
     if (current_state == STATE_AVOID_GOING_OUTSIDE) {
         // move away from tape
         do_stop();
-        delay(100);
+//        delay(100);
         if (current_avoid_strategy == STRATEGY_BACK_RIGHT) {
             spinBackRight();
         }
