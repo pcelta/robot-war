@@ -193,11 +193,11 @@ void update_sensor_values() {
 }
 
 void update_state() {
-    if (distance_echo <= 60) {
+    if (distance_echo <= 70) {
       current_state = STATE_ENEMY_ATTACK;
     }
 
-    if (distance_echo > 60) {
+    if (distance_echo > 70) {
       current_state = STATE_ENEMY_FIND;
     }
 
@@ -223,7 +223,7 @@ void execute_strategy() {
 
     if (current_state == STATE_ENEMY_ATTACK) {
         // move forward
-       if (distance_echo < 30) {
+       if (distance_echo < 60) {
           do_ramming_speed_plus();
        } else {
           do_ramming_speed();
